@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(#ff9a9e,#fad0c4);
+font-family:'Comic Sans MS', cursive;
+overflow:hidden;
+}
+
+.container{
+text-align:center;
+color:white;
+}
+
+/* Teddy */
+#teddy{
+width:170px;
+animation:bounce 1.6s infinite;
+margin-bottom:15px;
+}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-25px);}
+}
+
+/* Question */
+h1{
+font-size:2.3em;
+margin-bottom:20px;
+}
+
+/* Button wrapper */
+.buttons{
+position:relative;
+width:320px;
+height:70px;
+margin:auto;
+}
+
+/* Buttons */
+button{
+position:absolute;
+border:none;
+padding:14px 36px;
+border-radius:40px;
+font-size:18px;
+cursor:pointer;
+transition:none;
+}
+
+/* YES */
+#yesBtn{
+background:#ff4f7b;
+color:white;
+left:0;
+}
+
+/* NO */
+#noBtn{
+background:white;
+color:#ff4f7b;
+right:0;
+}
+
+/* Hidden */
+.hidden{display:none}
+
+/* Hearts */
+.heart{
+position:fixed;
+color:red;
+font-size:22px;
+animation:floatUp 4s linear forwards;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(0);opacity:1;}
+100%{transform:translateY(-600px);opacity:0;}
+}
+
+/* Burst */
+.burst{
+position:fixed;
+width:12px;
+height:12px;
+background:red;
+border-radius:50%;
+animation:burst 1s forwards;
+}
+
+@keyframes burst{
+to{
+transform:translate(var(--x),var(--y)) scale(0);
+opacity:0;
+}
+}
+
+/* Celebration */
+#celebration{
+margin-top:30px;
+}
+
+.gallery{
+display:flex;
+gap:15px;
+justify-content:center;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.gallery img{
+width:300px;
+height:320px;
+object-fit:cover;
+border-radius:20px;
+}
+
+/* ---------- Mobile Optimization ---------- */
+@media (max-width: 600px){
+
+body{padding:20px;}
+
+h1{font-size:1.7em;}
+
+#teddy{width:120px;}
+
+.buttons{width:260px;height:65px;}
+
+button{padding:12px 26px;font-size:16px;}
+
+#celebration h2{font-size:1.3em;}
+
+p{font-size:15px;line-height:1.4;padding:0 8px;}
+
+.gallery{gap:10px;}
+
+.gallery img{width:160px;height:180px;}
+}
+
+/* ---------- Extra Small Phones ---------- */
+@media (max-width: 400px){
+h1{font-size:1.5em;}
+#teddy{width:105px;}
+.gallery img{width:140px;height:160px;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<img id="teddy"
+src="https://imgs.search.brave.com/wO9V1f4mWiGl34wF3Rf49O5PefQNkBsIji-YxuMMovk/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9wbmcu/cG5ndHJlZS5jb20v/cG5nLXZlY3Rvci8y/MDI0MDgwMS9vdXJt/aWQvcG5ndHJlZS1i/ZWF1dGlmdWwtZW1v/amktdGVkZHktYmVh/ci1zdGlja2VyLXBu/Zy1pbWFnZV8xMzMy/Mjk3MC5wbmc">
+
+<!-- Early February message -->
+<p id="earlyMessage" class="hidden" style="font-size:1.2em;margin-bottom:15px;color:#fff;"></p>
+
+<h1 id="question">Will you be my Valentine? 💖</h1>
+
+<div class="buttons">
+<button id="yesBtn">YES 💘</button>
+<button id="noBtn">NO 💔</button>
+</div>
+
+<div id="celebration" class="hidden">
+<h2>Cheers to our first Valentine’s Day 🥂</h2>
+<h1>YAY 💕</h1>
+<p>The journey was short but the intensity is actually very High!! 💖</p>
+<div class="gallery">
+<img src="sibu1.jpg">
+<img src="sibu2.jpg">
+</div>
+</div>
+
+<audio id="music" preload="auto">
+  <source src="audio/music.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+<script>
+
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const question = document.getElementById("question");
+const teddy = document.getElementById("teddy");
+const celebration = document.getElementById("celebration");
+const music = document.getElementById("music");
+const earlyMessage = document.getElementById("earlyMessage");
+const buttons = document.querySelector(".buttons");
+
+/* Store original NO position */
+const original = { x:0, y:0 };
+
+window.onload = ()=>{
+    const r = noBtn.getBoundingClientRect();
+    original.x = r.left;
+    original.y = r.top;
+
+    // Check date
+    const today = new Date();
+    const feb14 = new Date(today.getFullYear(), 1, 14); // Month is 0-indexed
+
+    if(today < feb14){
+        // Before Feb 14: show only early message + teddy
+        earlyMessage.textContent = "Oh, somebody can't wait till 14th Feb, it seems! 💖";
+        earlyMessage.classList.remove("hidden");
+
+        // Hide rest
+        question.classList.add("hidden");
+        buttons.classList.add("hidden");
+        celebration.classList.add("hidden");
+    } else {
+        // From Feb 14: hide early message, show normal
+        earlyMessage.classList.add("hidden");
+        question.classList.remove("hidden");
+        buttons.classList.remove("hidden");
+    }
+};
+
+/* NO hover = teleport */
+noBtn.addEventListener("mouseenter",()=>{
+    const x = Math.random()*(window.innerWidth-120);
+    const y = Math.random()*(window.innerHeight-120);
+    noBtn.style.transform = `translate(${x-original.x}px, ${y-original.y}px)`;
+});
+
+/* YES hover = reset NO */
+yesBtn.addEventListener("mouseenter",()=>{
+    noBtn.style.transform="translate(0,0)";
+});
+
+/* YES click */
+yesBtn.addEventListener("click",()=>{
+
+    buttons.style.height = "0px";
+    yesBtn.style.display="none";
+    noBtn.style.display="none";
+    question.style.display="none";
+
+    teddy.src="https://imgs.search.brave.com/SDYB0IPQt1koX0PFrUq37dsOk1-p8T3xWQAgZBxtn08/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzIwLzRj/L2YwLzIwNGNmMDI4/ZWRlMGQ1NjkwODg2/ZjFjNjFhNDZmZTlm/LmpwZw";
+
+    celebration.classList.remove("hidden");
+    music.load();
+    music.currentTime = 0;
+
+    const playPromise = music.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => console.log("Audio playing"))
+                 .catch(err => console.log("Audio error:", err));
+    }
+
+    loveBurst();
+    startHearts();
+});
+
+/* Hearts */
+function startHearts(){
+    setInterval(()=>{
+        const h=document.createElement("div");
+        h.className="heart";
+        h.innerHTML="❤️";
+        h.style.left=Math.random()*window.innerWidth+"px";
+        h.style.bottom="0px";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),4000);
+    },300);
+}
+
+/* Burst */
+function loveBurst(){
+    for(let i=0;i<30;i++){
+        const b=document.createElement("div");
+        b.className="burst";
+        b.style.left="50%";
+        b.style.top="50%";
+        b.style.setProperty("--x",(Math.random()*400-200)+"px");
+        b.style.setProperty("--y",(Math.random()*400-200)+"px");
+        document.body.appendChild(b);
+        setTimeout(()=>b.remove(),1000);
+    }
+}
+
+</script>
+
+</body>
+</html>
